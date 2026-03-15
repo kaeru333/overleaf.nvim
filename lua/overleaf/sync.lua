@@ -57,9 +57,7 @@ end
 ---@param doc_path string Overleaf document path
 ---@return string
 function M.buf_name(doc_path)
-  if M._sync_dir then
-    return M._sync_dir .. '/' .. doc_path
-  end
+  if M._sync_dir then return M._sync_dir .. '/' .. doc_path end
   return 'overleaf://' .. doc_path
 end
 
@@ -67,9 +65,7 @@ end
 ---@param bufname string
 ---@return string|nil doc_path the document path if it's an Overleaf buffer
 function M.parse_buf_name(bufname)
-  if bufname:match('^overleaf://') then
-    return bufname:gsub('^overleaf://', '')
-  end
+  if bufname:match('^overleaf://') then return bufname:gsub('^overleaf://', '') end
   if M._sync_dir and bufname:sub(1, #M._sync_dir) == M._sync_dir then
     return bufname:sub(#M._sync_dir + 2) -- +2 for the trailing /
   end
@@ -106,9 +102,7 @@ end
 function M.schedule_write(doc)
   if not M._sync_dir then return end
 
-  if M._write_timers[doc.doc_id] then
-    vim.fn.timer_stop(M._write_timers[doc.doc_id])
-  end
+  if M._write_timers[doc.doc_id] then vim.fn.timer_stop(M._write_timers[doc.doc_id]) end
 
   M._write_timers[doc.doc_id] = vim.fn.timer_start(500, function()
     M._write_timers[doc.doc_id] = nil
@@ -206,12 +200,8 @@ function M._sync_closed_doc(doc, new_content)
 
     -- Build OT ops: delete all, then insert all
     local ops = {}
-    if #server_content > 0 then
-      table.insert(ops, { p = 0, d = server_content })
-    end
-    if #new_content > 0 then
-      table.insert(ops, { p = 0, i = new_content })
-    end
+    if #server_content > 0 then table.insert(ops, { p = 0, d = server_content }) end
+    if #new_content > 0 then table.insert(ops, { p = 0, i = new_content }) end
 
     bridge.request('applyOtUpdate', {
       docId = doc.doc_id,
@@ -371,9 +361,7 @@ function M.sync_all(state, project_tree, callback)
         -- Leave if no buffer (not opened by user)
         if not doc.bufnr then
           doc.joined = false
-          bridge.request('leaveDoc', { docId = doc_id }, function()
-            on_done()
-          end)
+          bridge.request('leaveDoc', { docId = doc_id }, function() on_done() end)
         else
           on_done()
         end

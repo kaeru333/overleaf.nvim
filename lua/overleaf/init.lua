@@ -1469,9 +1469,7 @@ function M.statusline()
   -- Show current doc name if in an overleaf buffer
   local bufname = vim.api.nvim_buf_get_name(0)
   local doc_path = sync.parse_buf_name(bufname)
-  if doc_path then
-    return 'OL: ' .. proj .. ' / ' .. doc_path
-  end
+  if doc_path then return 'OL: ' .. proj .. ' / ' .. doc_path end
 
   return 'OL: ' .. proj
 end
