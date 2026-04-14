@@ -67,6 +67,11 @@ function M.create(doc, lines)
     txt = 'text',
     md = 'markdown',
   }
+  -- Mark buffer as Overleaf-managed and disable vimtex so it doesn't
+  -- hijack :w (vimtex would launch an external PDF viewer for the local
+  -- mirror file, but we handle compile/preview through the Overleaf API).
+  vim.b[bufnr].overleaf = true
+  vim.b[bufnr].vimtex_enabled = 0
   if ft_map[ext] then vim.bo[bufnr].filetype = ft_map[ext] end
 
   -- Start syntax highlighting and LSP
