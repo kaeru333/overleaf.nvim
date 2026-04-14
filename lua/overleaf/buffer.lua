@@ -67,11 +67,14 @@ function M.create(doc, lines)
     txt = 'text',
     md = 'markdown',
   }
-  -- Mark buffer as Overleaf-managed and disable vimtex so it doesn't
-  -- hijack :w (vimtex would launch an external PDF viewer for the local
-  -- mirror file, but we handle compile/preview through the Overleaf API).
+  -- Mark buffer as Overleaf-managed and skip tex ftplugins (including vimtex)
+  -- so :w is not hijacked. We handle compile/preview through the Overleaf API,
+  -- and we attach treesitter/LSP/chktex ourselves below.
+  -- Note: b:vimtex_enabled is NOT honored by vimtex; only g:vimtex_enabled and
+  -- the standard b:did_ftplugin guard work. Setting b:did_ftplugin = 1 before
+  -- filetype assignment causes vimtex's ftplugin/tex.vim to finish immediately.
   vim.b[bufnr].overleaf = true
-  vim.b[bufnr].vimtex_enabled = 0
+  vim.b[bufnr].did_ftplugin = 1
   if ft_map[ext] then vim.bo[bufnr].filetype = ft_map[ext] end
 
   -- Start syntax highlighting and LSP
