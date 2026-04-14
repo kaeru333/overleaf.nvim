@@ -1035,6 +1035,13 @@ function M._open_pdf(output_files)
       config.log('debug', 'PDF download failed: %s', err.message)
       return
     end
+    -- Only launch the viewer when auto_open_pdf is enabled. When disabled,
+    -- the PDF is still downloaded so external viewers (e.g. zathura) that
+    -- watch the file can auto-reload.
+    if config.get().auto_open_pdf == false then
+      config.log('debug', 'PDF downloaded: %s (auto_open_pdf disabled)', result.path)
+      return
+    end
     vim.schedule(function() open_file(result.path) end)
   end)
 end

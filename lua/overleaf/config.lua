@@ -7,6 +7,7 @@ M._config = {
   base_url = 'https://www.overleaf.com', -- Overleaf instance URL (for self-hosted)
   pdf_viewer = nil, -- PDF viewer command (nil = auto-detect: 'open' on macOS, 'xdg-open' on Linux)
   pdf_dir = nil, -- PDF output directory (nil = system temp dir)
+  auto_open_pdf = true, -- Auto-launch PDF viewer after successful compile (false: download only; viewers like zathura will auto-reload)
   sync_dir = nil, -- Local file sync directory (nil = disabled; enables external tool integration)
   log_level = 'info', -- 'debug', 'info', 'warn', 'error'
 }
